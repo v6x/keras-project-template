@@ -1,0 +1,13 @@
+tensorflow-gpu==1.10
+keras>=2.2.4
+tensorpack>=0.8.6
+git+https://www.github.com/keras-team/keras-contrib.git
+msgpack
+numpy
+opencv-python
+h5py
+tqdm
+image
+Pillow
+dotmap
+python-telegram-bot
