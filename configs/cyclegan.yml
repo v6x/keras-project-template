@@ -1,0 +1,42 @@
+---
+exp:
+  name: "cyclegan_horse2zebra"
+  experiment_dir: "experiments/"
+dataset:
+  name: "horse2zebra"
+  image_size: 128
+  data_loader:
+    type: "cyclegan"
+    num_proc: 3
+    fit_resize: true
+    random_fit: true
+    random_fit_max_ratio: 1.3
+    random_flip: true
+    random_brightness: true
+    random_contrast: true
+model:
+  structure: "cyclegan"
+  generator:
+    model: "resnet"
+    lr: 0.0002
+    dropout: false
+    beta1: 0.5
+    recons_weight: 10
+    identity_weight: 5
+    clipvalue: 0
+    clipnorm: 0
+  discriminator:
+    model: "patchgan"
+    lr: 0.0002
+    beta1: 0.5
+    clipvalue: 0
+    clipnorm: 0
+trainer:
+  num_epochs: 200
+  batch_size: 4 # per gpu
+  fake_pool_size: 50
+  label_smoothing: false
+  use_lr_decay: false
+  save_checkpoint_freq: 10
+  keep_checkpoint_freq: 50
+  predict_freq: 20

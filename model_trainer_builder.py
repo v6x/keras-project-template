@@ -1,3 +1,11 @@
+from typing import Tuple
+
+from dotmap import DotMap
+from keras import Model
+
+from base.base_data_loader import BaseDataLoader
+from base.base_model import BaseModel
+from base.base_trainer import BaseTrainer
 from models.cyclegan_combined import CycleganCombined
 from models.patchgan_discriminator import PatchGanDiscriminator
 from models.resnet_generator import ResnetGenerator
@@ -5,7 +13,7 @@ from models.with_load_weights import WithLoadWeights, WithLoadOptimizerWeights
 from trainers.cyclegan_trainer import CycleGanModelTrainer
 
 
-def get_generator_model_builder(config):
+def get_generator_model_builder(config: DotMap) -> BaseModel:
     model_name = config.model.generator.model
     if model_name == 'resnet':
         return ResnetGenerator(config)
@@ -13,7 +21,7 @@ def get_generator_model_builder(config):
         raise ValueError(f"unknown generator model {model_name}")
 
 
-def get_discriminator_model_builder(config):
+def get_discriminator_model_builder(config: DotMap) -> BaseModel:
     model_name = config.model.discriminator.model
     if model_name == 'patchgan':
         return PatchGanDiscriminator(config)
@@ -22,7 +30,7 @@ def get_discriminator_model_builder(config):
 
 
 # returns combined_model (for load saved model), trainer
-def build_model_and_trainer(config, data_loader):
+def build_model_and_trainer(config: DotMap, data_loader: BaseDataLoader) -> Tuple[Model, BaseTrainer]:
     model_structure = config.model.structure
     generator_builder = get_generator_model_builder(config)
     discriminator_builder = get_discriminator_model_builder(config)

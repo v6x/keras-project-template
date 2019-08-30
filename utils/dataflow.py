@@ -1,39 +1,19 @@
-from tensorpack import DataFlow, ProxyDataFlow
+from typing import Generator, Optional
+
+from tensorpack import DataFlow
 
 
 class GeneratorToDataFlow(DataFlow):
-    def __init__(self, generator, size):
+    def __init__(self, generator: Generator, size: Optional[int] = None):
         super().__init__()
-        self.generator = generator
-        self.generator_size = size
+        self.generator: Generator = generator
+        self.generator_size: Optional[int] = size
 
-    def get_data(self):
+    def __iter__(self):
         for dp in self.generator:
             yield dp
 
-    def size(self):
+    def __len__(self):
+        if self.generator_size is None:
+            raise NotImplementedError
         return self.generator_size
-
-
-class InfiniteDataFlow(ProxyDataFlow):
-    def get_data(self):
-        while True:
-            for dp in self.ds.get_data():
-                yield dp
-
-
-class LimitSizedDataFlow(ProxyDataFlow):
-    def __init__(self, ds, limited_size):
-        super().__init__(ds)
-        self.limited_size = limited_size
-
-    def get_data(self):
-        i = 0
-        for dp in self.ds.get_data():
-            i += 1
-            if i > self.limited_size:
-                break
-            yield dp
-
-    def size(self):
-        return self.limited_size

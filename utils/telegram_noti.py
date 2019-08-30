@@ -8,7 +8,10 @@ def send_noti_to_telegram(message):
     except ImportError:
         print('telegram package is not installed. ' +
               'please install the package by executing $ pip install python-telegram-bot')
-        pass
+        return
+    except Exception as e:
+        print('sending message failed', e)
+        return
 
     try:
         token = os.environ['TELEGRAM_TOKEN']
@@ -18,3 +21,6 @@ def send_noti_to_telegram(message):
     except KeyError:
         print('TELEGRAM_TOKEN or TELEGRAM_CHAT_ID is not set')
         pass
+    except Exception as e:
+        print('sending message failed', e)
+        return

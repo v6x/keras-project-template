@@ -26,12 +26,18 @@ sh ./download_dataset.sh horse2zebra
 ```
 
 ## Setup config
-edit configs/cyclegan.json file
+edit configs/cyclegan.yml file
 
 ## To train
- ```shell
-python train.py -c configs/cyclegan.json
+```shell
+python train.py --config configs/cyclegan.yml
 ```
+
+### Training from a certain checkpoint.
+```shell
+python train.py --config configs/cyclegan.yml --chkpt 123
+```
+
 
 ## Visualize via Tensorboard
 ```shell

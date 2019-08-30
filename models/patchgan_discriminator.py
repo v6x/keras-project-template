@@ -1,4 +1,7 @@
+from typing import Optional, Tuple
+
 from keras import Model, Input
+from keras.engine import Layer
 from keras.layers import Conv2D, LeakyReLU, Activation
 from keras.optimizers import Adam
 from keras_contrib.layers import InstanceNormalization
@@ -7,8 +10,9 @@ from base.base_model import BaseModel
 
 
 class PatchGanDiscriminator(BaseModel):
-    def define_model(self, model_name):
-        def d_block(_input, filters, kernel_size, strides, activation, use_norm, name_prefix):
+    def define_model(self, model_name: str) -> Model:
+        def d_block(_input: Layer, filters: int, kernel_size: Tuple[int, int], strides: int, activation: Optional[str],
+                    use_norm: bool, name_prefix: str) -> Layer:
             _x = Conv2D(filters=filters, kernel_size=kernel_size, strides=strides, padding='same',
                         name=f'{name_prefix}conv')(_input)
             if use_norm:
@@ -45,11 +49,14 @@ class PatchGanDiscriminator(BaseModel):
 
         return Model(inputs=_input, outputs=x, name=model_name)
 
-    def build_model(self, model_name):
+    def build_model(self, model_name: str) -> Tuple[Model, Model]:
         model = self.define_model(model_name)
+
         optimizer = Adam(lr=self.config.model.discriminator.lr, beta_1=self.config.model.discriminator.beta1,
                          clipvalue=self.config.model.discriminator.clipvalue,
                          clipnorm=self.config.model.discriminator.clipnorm)
+        optimizer = self.process_optimizer(optimizer)
+
         parallel_model = self.multi_gpu_model(model)
         parallel_model.compile(optimizer=optimizer, loss='mse', metrics=['accuracy'])
         return model, parallel_model

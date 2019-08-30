@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from keras import Model, Input
 from keras.optimizers import Adam
 
@@ -6,7 +8,7 @@ from utils.layer import named
 
 
 class CycleganCombined(BaseModel):
-    def define_model(self, g_xy, g_yx, d_x, d_y, model_name):
+    def define_model(self, g_xy: Model, g_yx: Model, d_x: Model, d_y: Model, model_name: str) -> Model:
         # Note: change trainable after compilation not applied to compiled discriminator
         d_y.trainable = False
         d_x.trainable = False
@@ -33,13 +35,15 @@ class CycleganCombined(BaseModel):
         return Model(inputs=[img_x, img_y],
                      outputs=[valid_x, valid_y, recons_x, recons_y, identity_x, identity_y], name=model_name)
 
-    def build_model(self, g_xy, g_yx, d_x, d_y, model_name):
+    def build_model(self, g_xy: Model, g_yx: Model, d_x: Model, d_y: Model, model_name: str) -> Tuple[Model, Model]:
         combined = self.define_model(g_xy, g_yx, d_x, d_y, model_name)
 
         optimizer = Adam(lr=self.config.model.generator.lr, beta_1=self.config.model.generator.beta1,
                          clipvalue=self.config.model.generator.clipvalue, clipnorm=self.config.model.generator.clipnorm)
+        optimizer = self.process_optimizer(optimizer)
 
         parallel_combined = self.multi_gpu_model(combined)
+
         recons_weight = self.config.model.generator.recons_weight
         identity_weight = self.config.model.generator.identity_weight
         parallel_combined.compile(optimizer=optimizer,

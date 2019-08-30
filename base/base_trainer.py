@@ -1,11 +1,15 @@
 import abc
 
+from dotmap import DotMap
 
-class BaseTrain(object):
-    def __init__(self, data_loader, config):
-        self.data_loader = data_loader
-        self.config = config
+from base.base_data_loader import BaseDataLoader
+
+
+class BaseTrainer:
+    def __init__(self, data_loader: BaseDataLoader, config: DotMap) -> None:
+        self.data_loader: BaseDataLoader = data_loader
+        self.config: DotMap = config
 
     @abc.abstractmethod
-    def train(self):
+    def train(self) -> None:
         raise NotImplementedError

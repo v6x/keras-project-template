@@ -1,6 +1,7 @@
-tensorflow-gpu==1.10
-keras>=2.2.4
-tensorpack>=0.8.6
+horovod~=0.16.0
+tensorflow-gpu~=1.14.0
+keras==2.2.5
+tensorpack>=0.9.6
 git+https://www.github.com/keras-team/keras-contrib.git
 msgpack
 numpy
@@ -11,3 +12,4 @@ image
 Pillow
 dotmap
 python-telegram-bot
+python-prctl
