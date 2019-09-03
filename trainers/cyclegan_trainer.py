@@ -165,6 +165,7 @@ class CycleGanModelTrainer(BaseTrainer):
 
             epoch_logs = defaultdict(float)
             for step in range(1, steps_per_epoch + 1):
+                batch_logs = {'batch': step, 'size': self.config.trainer.batch_size}
                 batch_logs = {"batch": step, "size": self.config.trainer.batch_size}
                 self.on_batch_begin(step, batch_logs)
 

@@ -33,7 +33,7 @@ class WithLoadOptimizerWeights(BaseModel):
             else:
                 print(f"optimizer weights not found: {optimizer_checkpoint_path}.")
 
-        return compiled_model, parallel_compiled_model
+        return model, parallel_compiled_model
 
 
 # load model weights and optimizer weights
