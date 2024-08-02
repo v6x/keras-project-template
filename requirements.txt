@@ -1,6 +1,6 @@
 horovod~=0.16.0
 tensorflow-gpu~=1.14.0
-keras==2.2.5
+keras==2.13.1
 tensorpack>=0.9.6
 git+https://www.github.com/keras-team/keras-contrib.git
 msgpack
